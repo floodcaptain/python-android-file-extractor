@@ -11,8 +11,8 @@ import tkMessageBox
 
 
 def pull_operation(deviceid):
-	file_name='log.txt'
-	src='//sdcard//'+ file_name
+	file_name='log.txt'                             ##enter file name here with extension
+	src='//sdcard//'+ file_name						##enter path within quotes eg '//sdcard//' , use double /						
 	dest=os.path.join(os.getcwd(),'extracted')
 	if (isdir(dest)):
 		shutil.rmtree(dest)
