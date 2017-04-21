@@ -39,7 +39,9 @@ def list_devices():
 
 	for i in range(0,len(devices)):
 			deviceid = devices[i]
-			displaytext = 'fetch '+ deviceid
+			devicename = sp.check_output('adb -s '+deviceid+' shell getprop ro.product.model',shell=True)
+			#devicename.wait()
+			displaytext = 'fetch '+ devicename
 			devicelist = tk.Button(	root,text =displaytext,command = lambda: pull_operation(devices[i]))
 			devicelist.pack()
 
