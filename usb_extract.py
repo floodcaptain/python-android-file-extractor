@@ -4,12 +4,13 @@ from os.path import isfile,join,isdir
 import subprocess as sp
 import shutil
 import webbrowser
+#import mtTkinter as tk
 import Tkinter as tk
 import tkMessageBox
 
 
 
-def pull_operation():
+def pull_operation(deviceid):
 	file_name='log.txt'
 	src='//sdcard//'+ file_name
 	dest=os.path.join(os.getcwd(),'extracted')
@@ -17,12 +18,11 @@ def pull_operation():
 		shutil.rmtree(dest)
 	os.makedirs(dest)
 	os.chdir(dest)
-	cmd = 'adb pull ' + src
+	cmd = 'adb -s ' + deviceid +' pull ' + src
 	try:
 		adb = sp.Popen(cmd,shell=True)
 		adb.wait()
 		webbrowser.open(file_name)
-		list_devices()
 	except:
 		tkMessageBox.showinfo("ERROR!", "unexpected error, try again")			
 		return
@@ -37,10 +37,11 @@ def list_devices():
 	if devices == -1:
 		return #error!!
 
-	for i in range(len(devices)):
-			displaytext = 'fetch '+ devices[i]
-			devices = tk.Button(root,text =displaytext,command = pull_operation)
-			devices.pack()
+	for i in range(0,len(devices)):
+			deviceid = devices[i]
+			displaytext = 'fetch '+ deviceid
+			devicelist = tk.Button(	root,text =displaytext,command = lambda: pull_operation(devices[i]))
+			devicelist.pack()
 
 def check_devices():
 	device_list = sp.check_output("adb devices",shell=True)
