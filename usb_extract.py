@@ -47,9 +47,7 @@ def check_devices():
 	device_list = device_list.split()
 	if len(device_list)>4: #List of devices attached is 4
 		device_list=device_list[4:] #removes above elements
-		c = 'device'
-		c = c[::2]
-		print c
+		device_list = device_list[::2]
 		return device_list
 
 	else:
