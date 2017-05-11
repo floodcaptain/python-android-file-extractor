@@ -11,7 +11,7 @@ import tkMessageBox
 
 
 def pull_operation(deviceid):
-	file_name='log.txt'                             ##enter file name here with extension
+	file_name='gmm_storage.db-journal'                             ##enter file name here with extension
 	src='//sdcard//'+ file_name						##enter path within quotes eg '//sdcard//' , use double /						
 	dest=os.path.join(os.getcwd(),'extracted')
 	if (isdir(dest)):
@@ -22,7 +22,20 @@ def pull_operation(deviceid):
 	try:
 		adb = sp.Popen(cmd,shell=True)
 		adb.wait()
-		webbrowser.open(file_name)
+		sp.call("start strings.exe", shell = True)
+		sp.call("start strings64.exe", shell = True)
+		sp.call("strings gmm_storage.db-journal > file.txt", shell = True)
+		f = open('file.txt', 'r')
+		data = f.read()
+		a = data.find("maps/preview")
+		c= data.find("@", a)
+		d = data.find(",", c)
+		e = data.find(',', d+1)
+		coordinates = data[c+1:e]
+
+		driver = webdriver.Chrome(executable_path="C:\\Users\\Pranav Jain\\Desktop\\chromedriver")
+		driver.get("https://www.google.co.in/maps/search/"+coordinates)
+		sp.call("rm file.txt")
 	except:
 		tkMessageBox.showinfo("ERROR!", "unexpected error, try again")			
 		return
