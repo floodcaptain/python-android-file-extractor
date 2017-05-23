@@ -4,10 +4,9 @@ from os.path import isfile,join,isdir
 import subprocess as sp
 import shutil
 import webbrowser
-#import mtTkinter as tk
 import Tkinter as tk
 import tkMessageBox
-
+from selenium import webdriver
 
 
 def pull_operation(deviceid):
@@ -18,14 +17,17 @@ def pull_operation(deviceid):
 		shutil.rmtree(dest)
 	os.makedirs(dest)
 	os.chdir(dest)
-	cmd = 'adb -s ' + deviceid +' pull ' + src
+	cmd = 'adb -s ' + deviceid +' pull ' + src #pulls file from src to dest
 	try:
 		adb = sp.Popen(cmd,shell=True)
 		adb.wait()
-		sp.call("start strings.exe", shell = True)
-		sp.call("start strings64.exe", shell = True)
-		sp.call("strings gmm_storage.db-journal > file.txt", shell = True)
-		f = open('file.txt', 'r')
+
+		if(os.name=="nt"):
+			sp.call("start strings.exe", shell = True)
+			sp.call("start strings64.exe", shell = True)
+		
+		sp.call("strings gmm_storage.db-journal > output.txt", shell = True)
+		f = open('output.txt', 'r')
 		data = f.read()
 		a = data.find("maps/preview")
 		c= data.find("@", a)
@@ -33,9 +35,9 @@ def pull_operation(deviceid):
 		e = data.find(',', d+1)
 		coordinates = data[c+1:e]
 
-		driver = webdriver.Chrome(executable_path="C:\\Users\\Pranav Jain\\Desktop\\chromedriver")
+		driver = webdriver.Chrome(executable_path=os.path.join(os.getcwd(),"chromedriver"))
 		driver.get("https://www.google.co.in/maps/search/"+coordinates)
-		sp.call("rm file.txt")
+		sp.call("rm output.txt")
 	except:
 		tkMessageBox.showinfo("ERROR!", "unexpected error, try again")			
 		return
