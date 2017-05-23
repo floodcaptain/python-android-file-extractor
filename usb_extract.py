@@ -35,7 +35,7 @@ def pull_operation(deviceid):
 		e = data.find(',', d+1)
 		coordinates = data[c+1:e]
 
-		driver = webdriver.Chrome(executable_path=os.path.join(os.getcwd(),"chromedriver"))
+		driver = webdriver.Chrome(executable_path=os.path.join(os.getcwd(),"./chromedriver"))
 		driver.get("https://www.google.co.in/maps/search/"+coordinates)
 		sp.call("rm output.txt")
 	except:
